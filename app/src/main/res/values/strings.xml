@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PopularMovies</string>
+
+    <string name="error_message">An error has occurred. Please try again.</string>
+
+    <!-- Content descriptions-->
+    <string name="movie_poster_content_description">Movie poster picture</string>
 </resources>
