@@ -2,7 +2,9 @@
     <string name="app_name">Pop Movies</string>
     <string name="detail_name">Movie Detail</string>
 
-    <string name="error_message">An error has occurred. Please try again.</string>
+    <string name="action_refresh">Refresh</string>
+
+    <string name="error_message">An error has occurred. Please try again by clicking Refresh.</string>
 
     <!-- Content descriptions-->
     <string name="movie_poster_content_description">Movie poster picture</string>
