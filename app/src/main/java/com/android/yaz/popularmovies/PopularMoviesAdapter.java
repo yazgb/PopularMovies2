@@ -7,23 +7,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.android.yaz.popularmovies.model.PopularMovie;
 import com.squareup.picasso.Picasso;
 
 public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdapter.MoviesAdapterViewHolder>{
 
-    private String[] mMoviesData;
+    private PopularMovie[] mMoviesData;
+    private final ItemClickListener mOnClickListener;
 
-    public PopularMoviesAdapter() {
-
+    public interface ItemClickListener {
+        void itemClick(int clickedItemIndex);
     }
 
-    public class MoviesAdapterViewHolder extends RecyclerView.ViewHolder {
+    public PopularMoviesAdapter(ItemClickListener onClickListener) {
+        mOnClickListener = onClickListener;
+    }
+
+    public class MoviesAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final ImageView mImageView;
 
         public MoviesAdapterViewHolder(View view) {
             super(view);
             mImageView = (ImageView) view.findViewById(R.id.poster_image);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int itemPosition = getAdapterPosition();
+            mOnClickListener.itemClick(itemPosition);
         }
     }
 
@@ -38,7 +51,9 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
 
     @Override
     public void onBindViewHolder(MoviesAdapterViewHolder moviesAdapterViewHolder, int position) {
-        String posterUrl = mMoviesData[position];
+
+        PopularMovie movie = mMoviesData[position];
+        String posterUrl = movie.getPosterPath();
 
         Picasso.with(moviesAdapterViewHolder.itemView.getContext())
                 .load(posterUrl)
@@ -53,7 +68,7 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
             return mMoviesData.length;
     }
 
-    public void setPopularMoviesData(String[] moviesData) {
+    public void setPopularMoviesData(PopularMovie[] moviesData) {
         mMoviesData = moviesData;
         notifyDataSetChanged();
     }

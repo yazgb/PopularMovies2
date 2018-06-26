@@ -1,5 +1,6 @@
 package com.android.yaz.popularmovies;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,18 +10,28 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.yaz.popularmovies.model.PopularMovie;
 import com.android.yaz.popularmovies.utilities.NetworkUtils;
 import com.android.yaz.popularmovies.utilities.PopularMoviesJsonUtils;
 
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PopularMoviesAdapter.ItemClickListener{
 
     private RecyclerView mRecyclerView;
     private PopularMoviesAdapter mPopularMoviesAdapter;
     private GridLayoutManager mGridLayoutManager;
     private ProgressBar mLoadingPb;
     private TextView mErrorMessage;
+
+    PopularMovie[] tmdbSearchResults;
+
+    final String ID = "ID";
+    final String TITLE = "TITLE";
+    final String POSTER = "POSTER";
+    final String SYNOPSIS = "SYNOPSIS";
+    final String RATING = "RATING";
+    final String RELEASED_DATE = "RELEASED_DATE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
-        mPopularMoviesAdapter = new PopularMoviesAdapter();
+        mPopularMoviesAdapter = new PopularMoviesAdapter(this);
 
         mRecyclerView.setAdapter(mPopularMoviesAdapter);
 
@@ -60,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         mErrorMessage.setVisibility(View.VISIBLE);
     }
 
-    private class tmdbQueryTask extends AsyncTask<URL, Void, String[]> {
+    private class tmdbQueryTask extends AsyncTask<URL, Void, PopularMovie[]> {
 
         @Override
         protected void onPreExecute() {
@@ -69,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String[] doInBackground(URL... urls) {
+        protected PopularMovie[] doInBackground(URL... urls) {
             URL tmdbSearchUrl = urls[0];
 
             String jsonSearchResults = null;
@@ -77,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 jsonSearchResults = NetworkUtils.getResponseFromHttpUrl(tmdbSearchUrl);
 
-                String[] tmdbSearchResults = PopularMoviesJsonUtils.getSimplePopularMoviesStringsFromJson(jsonSearchResults);
+                tmdbSearchResults = PopularMoviesJsonUtils.getSimplePopularMoviesStringsFromJson(jsonSearchResults);
 
                 return tmdbSearchResults;
 
@@ -88,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String[] popularMoviesData) {
+        protected void onPostExecute(PopularMovie[] popularMoviesData) {
 
             mLoadingPb.setVisibility(View.INVISIBLE);
 
@@ -99,5 +110,20 @@ public class MainActivity extends AppCompatActivity {
                 showErrorMessage();
             }
         }
+    }
+
+    @Override
+    public void itemClick(int clickedItemIndex) {
+
+        Intent detailIntent = new Intent(MainActivity.this, DetailActivity.class);
+
+        detailIntent.putExtra(ID,tmdbSearchResults[clickedItemIndex].getId());
+        detailIntent.putExtra(TITLE,tmdbSearchResults[clickedItemIndex].getOriginalTitle());
+        detailIntent.putExtra(POSTER,tmdbSearchResults[clickedItemIndex].getPosterPath());
+        detailIntent.putExtra(SYNOPSIS,tmdbSearchResults[clickedItemIndex].getSynopsis());
+        detailIntent.putExtra(RATING,tmdbSearchResults[clickedItemIndex].getUserRating());
+        detailIntent.putExtra(RELEASED_DATE, tmdbSearchResults[clickedItemIndex].getReleasedDate());
+
+        startActivity(detailIntent);
     }
 }

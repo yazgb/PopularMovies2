@@ -1,8 +1,17 @@
 <resources>
-    <string name="app_name">PopularMovies</string>
+    <string name="app_name">Pop Movies</string>
+    <string name="detail_name">Movie Detail</string>
 
     <string name="error_message">An error has occurred. Please try again.</string>
 
     <!-- Content descriptions-->
     <string name="movie_poster_content_description">Movie poster picture</string>
+    <string name="movie_title_content_description">Movie title</string>
+
+
+    <string name="movie_title">Coco</string>
+    <string name="movie_poster">http://image.tmdb.org/t/p/w154//eKi8dIrr8voobbaGzDpe8w0PVbC.jpg</string>
+    <string name="movie_released_date">2017</string>
+    <string name="movie_rating">7.8</string>
+    <string name="movie_synopsis">Despite his family\'s baffling generations-old ban on music, Miguel dreams of becoming an accomplished musician like his idol, Ernesto de la Cruz. Desperate to prove his talent, Miguel finds himself in the stunning and colorful Land of the Dead following a mysterious chain of events. Along the way, he meets charming trickster Hector, and together, they set off on an extraordinary journey to unlock the real story behind Miguel\'s family history.</string>
 </resources>
