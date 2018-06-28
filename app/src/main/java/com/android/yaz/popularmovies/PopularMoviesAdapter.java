@@ -16,7 +16,7 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
     private final ItemClickListener mOnClickListener;
 
     public interface ItemClickListener {
-        void itemClick(int clickedItemIndex);
+        void itemClick(PopularMovie clickedMovie);
     }
 
     public PopularMoviesAdapter(ItemClickListener onClickListener) {
@@ -36,7 +36,8 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
         @Override
         public void onClick(View view) {
             int itemPosition = getAdapterPosition();
-            mOnClickListener.itemClick(itemPosition);
+            PopularMovie movieDetails = mMoviesData[itemPosition];
+            mOnClickListener.itemClick(movieDetails);
         }
     }
 

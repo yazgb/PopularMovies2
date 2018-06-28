@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
     private ProgressBar mLoadingPb;
     private TextView mErrorMessage;
 
-    PopularMovie[] tmdbSearchResults;
-
     final String ID = "ID";
     final String TITLE = "TITLE";
     final String POSTER = "POSTER";
@@ -91,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
             try {
                 jsonSearchResults = NetworkUtils.getResponseFromHttpUrl(tmdbSearchUrl);
 
-                tmdbSearchResults = PopularMoviesJsonUtils.getSimplePopularMoviesStringsFromJson(jsonSearchResults);
+                PopularMovie[] tmdbSearchResults = PopularMoviesJsonUtils.getSimplePopularMoviesStringsFromJson(jsonSearchResults);
 
                 return tmdbSearchResults;
 
@@ -116,16 +114,16 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
     }
 
     @Override
-    public void itemClick(int clickedItemIndex) {
+    public void itemClick(PopularMovie clickedMovie) {
 
         Intent detailIntent = new Intent(MainActivity.this, DetailActivity.class);
 
-        detailIntent.putExtra(ID,tmdbSearchResults[clickedItemIndex].getId());
-        detailIntent.putExtra(TITLE,tmdbSearchResults[clickedItemIndex].getOriginalTitle());
-        detailIntent.putExtra(POSTER,tmdbSearchResults[clickedItemIndex].getPosterPath());
-        detailIntent.putExtra(SYNOPSIS,tmdbSearchResults[clickedItemIndex].getSynopsis());
-        detailIntent.putExtra(RATING,tmdbSearchResults[clickedItemIndex].getUserRating());
-        detailIntent.putExtra(RELEASED_DATE, tmdbSearchResults[clickedItemIndex].getReleasedDate());
+        detailIntent.putExtra(ID,clickedMovie.getId());
+        detailIntent.putExtra(TITLE,clickedMovie.getOriginalTitle());
+        detailIntent.putExtra(POSTER,clickedMovie.getPosterPath());
+        detailIntent.putExtra(SYNOPSIS,clickedMovie.getSynopsis());
+        detailIntent.putExtra(RATING,clickedMovie.getUserRating());
+        detailIntent.putExtra(RELEASED_DATE, clickedMovie.getReleasedDate());
 
         startActivity(detailIntent);
     }
