@@ -13,13 +13,16 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
 
-    TextView mMovieTitle;
-    ImageView mMoviePoster;
-    TextView mMovieReleasedDate;
-    TextView mMovieRating;
-    TextView mMovieSynopsis;
+    @BindView(R.id.title_tv) TextView mMovieTitle;
+    @BindView(R.id.poster_iv) ImageView mMoviePoster;
+    @BindView(R.id.released_date_tv) TextView mMovieReleasedDate;
+    @BindView(R.id.rating_tv) TextView mMovieRating;
+    @BindView(R.id.synopsis_tv) TextView mMovieSynopsis;
 
     final String ID = "ID";
     final String TITLE = "TITLE";
@@ -32,12 +35,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        mMovieTitle = (TextView) findViewById(R.id.title_tv);
-        mMoviePoster = (ImageView) findViewById(R.id.poster_iv);
-        mMovieReleasedDate = (TextView) findViewById(R.id.released_date_tv);
-        mMovieRating = (TextView) findViewById(R.id.rating_tv);
-        mMovieSynopsis = (TextView) findViewById(R.id.synopsis_tv);
+        ButterKnife.bind(this);
 
         Intent intentOrigin = getIntent();
 

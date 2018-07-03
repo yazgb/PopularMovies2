@@ -24,14 +24,18 @@ import com.android.yaz.popularmovies.utilities.PopularMoviesJsonUtils;
 
 import java.net.URL;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements PopularMoviesAdapter.ItemClickListener,
         LoaderManager.LoaderCallbacks<PopularMovie[]>, SharedPreferences.OnSharedPreferenceChangeListener{
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.recycler_view_popular_movies) RecyclerView mRecyclerView;
+    @BindView(R.id.loading_pb) ProgressBar mLoadingPb;
+    @BindView(R.id.error_message_tv) TextView mErrorMessage;
+
     private PopularMoviesAdapter mPopularMoviesAdapter;
     private GridLayoutManager mGridLayoutManager;
-    private ProgressBar mLoadingPb;
-    private TextView mErrorMessage;
 
     final String ID = "ID";
     final String TITLE = "TITLE";
@@ -48,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_popular_movies);
         mRecyclerView.setHasFixedSize(true);
 
         mGridLayoutManager = new GridLayoutManager(this, 2);
@@ -59,9 +63,6 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
         mPopularMoviesAdapter = new PopularMoviesAdapter(this);
 
         mRecyclerView.setAdapter(mPopularMoviesAdapter);
-
-        mLoadingPb = (ProgressBar) findViewById(R.id.loading_pb);
-        mErrorMessage = (TextView) findViewById(R.id.error_message_tv);
 
         LoaderManager.LoaderCallbacks<PopularMovie[]> callback = MainActivity.this;
         Bundle bundleForLoader = null;
