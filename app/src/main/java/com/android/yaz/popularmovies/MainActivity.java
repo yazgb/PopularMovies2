@@ -1,6 +1,8 @@
 package com.android.yaz.popularmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.yaz.popularmovies.model.MoviesPreferences;
 import com.android.yaz.popularmovies.model.PopularMovie;
 import com.android.yaz.popularmovies.utilities.NetworkUtils;
 import com.android.yaz.popularmovies.utilities.PopularMoviesJsonUtils;
@@ -22,7 +25,7 @@ import com.android.yaz.popularmovies.utilities.PopularMoviesJsonUtils;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements PopularMoviesAdapter.ItemClickListener,
-        LoaderManager.LoaderCallbacks<PopularMovie[]>{
+        LoaderManager.LoaderCallbacks<PopularMovie[]>, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private RecyclerView mRecyclerView;
     private PopularMoviesAdapter mPopularMoviesAdapter;
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
     final String RELEASED_DATE = "RELEASED_DATE";
 
     private static final int MOVIE_LOADER_ID = 0;
+
+    private static boolean PREFERENCES_HAVE_BEEN_UPDATED = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
         Bundle bundleForLoader = null;
 
         getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, bundleForLoader, callback);
+
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }
 
     private void showMoviesDataView() {
@@ -94,7 +101,9 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
             @Override
             public PopularMovie[] loadInBackground() {
 
-                URL url = NetworkUtils.buildUrlWithPopular();
+                String sortOrder = MoviesPreferences.getPreferredSortOrder(MainActivity.this);
+
+                URL url = NetworkUtils.buildUrl(sortOrder);
 
                 try {
                     String jsonMoviesResponse = NetworkUtils.getResponseFromHttpUrl(url);
@@ -168,6 +177,34 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
             return true;
         }
 
+        if( id == R.id.action_settings) {
+            Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+            startActivity(startSettingsActivity);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        PREFERENCES_HAVE_BEEN_UPDATED = true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(PREFERENCES_HAVE_BEEN_UPDATED) {
+            getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
+            PREFERENCES_HAVE_BEEN_UPDATED = false;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
     }
 }

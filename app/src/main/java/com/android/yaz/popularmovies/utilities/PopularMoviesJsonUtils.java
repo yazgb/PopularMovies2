@@ -7,10 +7,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Utility class to handle TheMovieDB JSON data.
+ * Utility class to handle The Movie DB JSON data.
  */
 public final class PopularMoviesJsonUtils {
 
+    /**
+     * This method parses JSON result from a web response and returns an array of PopularMovies that describes
+     * details of popular movies or top rated movies.
+     * @param moviesJsonStr JSON response from server.
+     * @return Array of PopularMovies describing movie data.
+     * @throws JSONException If JSON data can't be properly parsed.
+     */
     public static PopularMovie[] getSimplePopularMoviesStringsFromJson(String moviesJsonStr) throws JSONException {
 
         final String STATUS_CODE = "status_code";

@@ -10,28 +10,29 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+/**
+ * This class is used to communicate with The Movie DB servers.
+ */
 public class NetworkUtils {
 
     final static String TAG = NetworkUtils.class.getSimpleName();
 
     final static String TMDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
-    final static String PATH_POPULAR = "popular";
 
-    /**
-     * The API Key field.
-     */
+    /* The API Key field */
     final static String PARAM_API_KEY = "api_key";
     final static String apiKey = "[YOUR_API_KEY_HERE]";
 
     /**
      * Builds the URL used to query TheMovieDB.
      *
-     * @return The URL to use to query The MovieDB.
+     * @param sortOrder The type of sort order to query movies data. It can be most popular or highest rated movies.
+     * @return The URL to use to query The Movie DB server.
      */
-    public static URL buildUrlWithPopular() {
+    public static URL buildUrl(String sortOrder) {
 
         Uri builtUri = Uri.parse(TMDB_BASE_URL).buildUpon()
-                .appendPath(PATH_POPULAR)
+                .appendPath(sortOrder)
                 .appendQueryParameter(PARAM_API_KEY, apiKey)
                 .build();
 
@@ -48,7 +49,7 @@ public class NetworkUtils {
     }
 
     /**
-     * This method returns the entire result from the HTTP response.
+     * This method returns the result from the HTTP response.
      *
      * @param url The URL to fetch the HTTP response from.
      * @return The contents of the HTTP response.
