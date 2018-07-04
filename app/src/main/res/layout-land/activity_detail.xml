@@ -33,10 +33,10 @@
             android:textSize="32sp"
             app:layout_constraintBottom_toBottomOf="@+id/header_iv"
             app:layout_constraintEnd_toEndOf="@id/header_iv"
-            app:layout_constraintHorizontal_bias="0.03"
+            app:layout_constraintHorizontal_bias="0.017"
             app:layout_constraintStart_toStartOf="@+id/header_iv"
             app:layout_constraintTop_toTopOf="@id/header_iv"
-            app:layout_constraintVertical_bias="0.152"
+            app:layout_constraintVertical_bias="0.0"
             tools:text="@string/movie_title" />
 
         <ImageView
@@ -84,9 +84,9 @@
             android:paddingBottom="16dp"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
-            app:layout_constraintLeft_toLeftOf="@+id/poster_iv"
+            app:layout_constraintLeft_toLeftOf="@id/rating_tv"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/poster_iv"
+            app:layout_constraintTop_toBottomOf="@+id/rating_tv"
             tools:text="@string/movie_synopsis" />
 
     </android.support.constraint.ConstraintLayout>
