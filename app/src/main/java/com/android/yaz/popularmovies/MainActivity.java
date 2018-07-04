@@ -2,6 +2,7 @@ package com.android.yaz.popularmovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -56,7 +57,11 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
 
         mRecyclerView.setHasFixedSize(true);
 
-        mGridLayoutManager = new GridLayoutManager(this, 2);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mGridLayoutManager = new GridLayoutManager(this, 2);
+        } else {
+            mGridLayoutManager = new GridLayoutManager(this, 3);
+        }
 
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
