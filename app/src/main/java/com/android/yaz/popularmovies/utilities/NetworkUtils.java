@@ -15,13 +15,13 @@ import java.util.Scanner;
  */
 public class NetworkUtils {
 
-    final static String TAG = NetworkUtils.class.getSimpleName();
+    private final static String TAG = NetworkUtils.class.getSimpleName();
 
-    final static String TMDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
+    private final static String TMDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
 
     /* The API Key field */
-    final static String PARAM_API_KEY = "api_key";
-    final static String apiKey = "[YOUR_API_KEY_HERE]";
+    private final static String PARAM_API_KEY = "api_key";
+    private final static String apiKey = "[YOUR_API_KEY_HERE]";
 
     /**
      * Builds the URL used to query TheMovieDB.

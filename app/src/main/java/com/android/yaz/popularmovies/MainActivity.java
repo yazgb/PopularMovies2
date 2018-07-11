@@ -38,14 +38,8 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
     private PopularMoviesAdapter mPopularMoviesAdapter;
     private GridLayoutManager mGridLayoutManager;
 
-    final String ID = "ID";
-    final String TITLE = "TITLE";
-    final String POSTER = "POSTER";
-    final String SYNOPSIS = "SYNOPSIS";
-    final String RATING = "RATING";
-    final String RELEASED_DATE = "RELEASED_DATE";
-
-    private static final int MOVIE_LOADER_ID = 0;
+    private final static String CLICKED_MOVIE = "clickedMovie";
+    private final static int MOVIE_LOADER_ID = 0;
 
     private static boolean PREFERENCES_HAVE_BEEN_UPDATED = false;
 
@@ -154,14 +148,7 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
     public void itemClick(PopularMovie clickedMovie) {
 
         Intent detailIntent = new Intent(MainActivity.this, DetailActivity.class);
-
-        detailIntent.putExtra(ID,clickedMovie.getId());
-        detailIntent.putExtra(TITLE,clickedMovie.getOriginalTitle());
-        detailIntent.putExtra(POSTER,clickedMovie.getPosterPath());
-        detailIntent.putExtra(SYNOPSIS,clickedMovie.getSynopsis());
-        detailIntent.putExtra(RATING,clickedMovie.getUserRating());
-        detailIntent.putExtra(RELEASED_DATE, clickedMovie.getReleasedDate());
-
+        detailIntent.putExtra(CLICKED_MOVIE, clickedMovie);
         startActivity(detailIntent);
     }
 

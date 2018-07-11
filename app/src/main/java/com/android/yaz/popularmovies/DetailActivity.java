@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.yaz.popularmovies.model.PopularMovie;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -24,51 +25,30 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.rating_tv) TextView mMovieRating;
     @BindView(R.id.synopsis_tv) TextView mMovieSynopsis;
 
-    final String ID = "ID";
-    final String TITLE = "TITLE";
-    final String POSTER = "POSTER";
-    final String SYNOPSIS = "SYNOPSIS";
-    final String RATING = "RATING";
-    final String RELEASED_DATE = "RELEASED_DATE";
+    private final static String CLICKED_MOVIE = "clickedMovie";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
+        setupUI();
+    }
 
+    protected void setupUI() {
         Intent intentOrigin = getIntent();
 
-        if(intentOrigin.hasExtra(ID)) {
-            String movieId = intentOrigin.getStringExtra(ID);
-        }
+        if(intentOrigin.hasExtra(CLICKED_MOVIE)) {
 
-        if(intentOrigin.hasExtra(TITLE)) {
-            String movieTitle = intentOrigin.getStringExtra(TITLE);
-            mMovieTitle.append(movieTitle);
-        }
+            PopularMovie movie = intentOrigin.getParcelableExtra(CLICKED_MOVIE);
 
-        if(intentOrigin.hasExtra(POSTER)) {
-            String moviePoster = intentOrigin.getStringExtra(POSTER);
-
+            mMovieTitle.append(movie.getOriginalTitle());
             Picasso.with(this)
-                    .load(moviePoster)
+                    .load(movie.getPosterPath())
                     .into(mMoviePoster);
-        }
-
-        if(intentOrigin.hasExtra(SYNOPSIS)) {
-            String movieSynopsis = intentOrigin.getStringExtra(SYNOPSIS);
-            mMovieSynopsis.append(movieSynopsis);
-        }
-
-        if(intentOrigin.hasExtra(RATING)) {
-            String movieRating = intentOrigin.getStringExtra(RATING);
-            mMovieRating.append(movieRating);
-        }
-
-        if(intentOrigin.hasExtra(RELEASED_DATE)) {
-            String movieReleasedDate = intentOrigin.getStringExtra(RELEASED_DATE);
-            mMovieReleasedDate.append(movieReleasedDate);
+            mMovieSynopsis.append(movie.getSynopsis());
+            mMovieRating.append(movie.getUserRating());
+            mMovieReleasedDate.append(movie.getReleasedDate());
         }
     }
 

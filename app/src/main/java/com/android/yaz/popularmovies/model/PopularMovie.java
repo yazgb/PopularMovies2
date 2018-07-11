@@ -1,6 +1,9 @@
 package com.android.yaz.popularmovies.model;
 
-public class PopularMovie {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PopularMovie implements Parcelable {
 
     private String id;
     private String originalTitle;
@@ -17,6 +20,42 @@ public class PopularMovie {
         this.userRating = userRating;
         this.releasedDate = releasedDate;
     }
+
+    protected PopularMovie(Parcel in) {
+        id = in.readString();
+        originalTitle = in.readString();
+        posterPath = in.readString();
+        synopsis = in.readString();
+        userRating = in.readString();
+        releasedDate = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(originalTitle);
+        parcel.writeString(posterPath);
+        parcel.writeString(synopsis);
+        parcel.writeString(userRating);
+        parcel.writeString(releasedDate);
+    }
+
+    public static final Creator<PopularMovie> CREATOR = new Creator<PopularMovie>() {
+        @Override
+        public PopularMovie createFromParcel(Parcel in) {
+            return new PopularMovie(in);
+        }
+
+        @Override
+        public PopularMovie[] newArray(int size) {
+            return new PopularMovie[size];
+        }
+    };
 
     public String getId() {
         return id;
