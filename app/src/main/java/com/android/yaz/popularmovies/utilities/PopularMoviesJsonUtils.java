@@ -1,5 +1,8 @@
 package com.android.yaz.popularmovies.utilities;
 
+import android.util.Log;
+
+import com.android.yaz.popularmovies.model.MovieReview;
 import com.android.yaz.popularmovies.model.PopularMovie;
 
 import org.json.JSONArray;
@@ -10,6 +13,8 @@ import org.json.JSONObject;
  * Utility class to handle The Movie DB JSON data.
  */
 public final class PopularMoviesJsonUtils {
+
+    private final static String TAG = PopularMoviesJsonUtils.class.getSimpleName();
 
     /**
      * This method parses JSON result from a web response and returns an array of PopularMovies that describes
@@ -71,6 +76,111 @@ public final class PopularMoviesJsonUtils {
             parsedJsonStr[i] = movie;
         }
 
+        return parsedJsonStr;
+    }
+
+    /**
+     * This method parses JSON result from a web response and returns an array of Strings that describes
+     * info of trailers of a movie.
+     * @param trailersJsonStr JSON response from server.
+     * @return Array of trailers of a movie.
+     * @throws JSONException If JSON data can't be properly parsed.
+     */
+    public static String[] getTrailersStringsFromJson(String trailersJsonStr) throws JSONException {
+
+        final String STATUS_CODE = "status_code";
+        final String RESULTS = "results";
+
+        final String TRAILER_KEY = "key";
+
+        String[] parsedJsonStr = null;
+
+        JSONObject trailersJson = new JSONObject(trailersJsonStr);
+
+        if(trailersJson.has(STATUS_CODE)) {
+            int statusCode = trailersJson.getInt(STATUS_CODE);
+
+            switch(statusCode) {
+                case 1: // HTTP Status 200 Success.
+                    break;
+                case 3: // HTTP Status 401 Authentication failed: You do not have permissions to access the service.
+                    return null;
+                case 6: // HTTP Status 404 Invalid id: The pre-requisite id is invalid or not found.
+                    return null;
+                default: // Server probably down.
+                    return null;
+            }
+        }
+
+        JSONArray trailersArray = trailersJson.getJSONArray(RESULTS);
+
+        int trailersArrayLength = trailersArray.length();
+        parsedJsonStr = new String[trailersArrayLength];
+
+        for(int i=0; i < trailersArrayLength; i++) {
+
+            JSONObject reviewJson = trailersArray.getJSONObject(i);
+            parsedJsonStr[i] = reviewJson.getString(TRAILER_KEY);
+        }
+
+        Log.d(TAG, String.valueOf(parsedJsonStr.length));
+        return parsedJsonStr;
+    }
+
+    /**
+     * This method parses JSON result from a web response and returns an array of MovieReviews that describes
+     * info of reviews of a movie.
+     * @param reviewsJsonStr JSON response from server.
+     * @return Array of reviews of a movie.
+     * @throws JSONException If JSON data can't be properly parsed.
+     */
+    public static MovieReview[] getReviewsStringsFromJson(String reviewsJsonStr) throws JSONException {
+
+        final String STATUS_CODE = "status_code";
+        final String RESULTS = "results";
+
+        final String MOVIE_ID = "id";
+        final String AUTHOR = "author";
+        final String REVIEW = "content";
+
+        MovieReview[] parsedJsonStr = null;
+
+        JSONObject reviewsJson = new JSONObject(reviewsJsonStr);
+
+        if(reviewsJson.has(STATUS_CODE)) {
+            int statusCode = reviewsJson.getInt(STATUS_CODE);
+
+            switch(statusCode) {
+                case 1: // HTTP Status 200 Success.
+                    break;
+                case 3: // HTTP Status 401 Authentication failed: You do not have permissions to access the service.
+                    return null;
+                case 6: // HTTP Status 404 Invalid id: The pre-requisite id is invalid or not found.
+                    return null;
+                default: // Server probably down.
+                    return null;
+            }
+        }
+
+        String movieId = reviewsJson.getString(MOVIE_ID);
+        JSONArray reviewsArray = reviewsJson.getJSONArray(RESULTS);
+
+        int reviewsArrayLength = reviewsArray.length();
+        parsedJsonStr = new MovieReview[reviewsArrayLength];
+
+        for(int i=0; i < reviewsArrayLength; i++) {
+
+            JSONObject reviewJson = reviewsArray.getJSONObject(i);
+
+            MovieReview movieReview = new MovieReview(
+                    movieId,
+                    reviewJson.getString(AUTHOR),
+                    reviewJson.getString(REVIEW));
+
+            parsedJsonStr[i] = movieReview;
+        }
+
+        Log.d(TAG, String.valueOf(parsedJsonStr.length));
         return parsedJsonStr;
     }
 }

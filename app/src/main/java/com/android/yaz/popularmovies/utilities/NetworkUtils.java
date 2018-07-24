@@ -49,6 +49,33 @@ public class NetworkUtils {
     }
 
     /**
+     * Builds the URL used to query trailers or reviews of a movie.
+     *
+     * @param movieId Identifier of the movie to be searched.
+     * @param searchType The type of search to query movie info. It can be its trailers or reviews.
+     * @return The URL to use to query The Movie DB server.
+     */
+    public static URL buildUrlWithMovieId(String movieId, String searchType) {
+
+        Uri builtUri = Uri.parse(TMDB_BASE_URL).buildUpon()
+                .appendPath(movieId)
+                .appendPath(searchType)
+                .appendQueryParameter(PARAM_API_KEY, apiKey)
+                .build();
+
+        Log.d(TAG, builtUri.toString());
+
+        URL url = null;
+
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+    /**
      * This method returns the result from the HTTP response.
      *
      * @param url The URL to fetch the HTTP response from.

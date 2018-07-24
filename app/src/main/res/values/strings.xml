@@ -8,10 +8,13 @@
     <string name="action_settings">Settings</string>
 
     <string name="error_message">An error has occurred. Please try again by clicking Refresh in the drop-down menu.</string>
+    <string name="no_trailers_message">There is no trailers.</string>
+    <string name="no_reviews_message">There is no reviews.</string>
 
     <!-- Content descriptions-->
     <string name="movie_poster_content_description">Movie poster picture</string>
     <string name="movie_title_content_description">Movie title</string>
+    <string name="play_arrow_content_description">Play arrow image</string>
 
     <!-- Used by activity_detail.xml -->
     <string name="movie_title">Coco</string>
@@ -19,6 +22,9 @@
     <string name="movie_released_date">2017</string>
     <string name="movie_rating">7.8</string>
     <string name="movie_synopsis">Despite his family\'s baffling generations-old ban on music, Miguel dreams of becoming an accomplished musician like his idol, Ernesto de la Cruz. Desperate to prove his talent, Miguel finds himself in the stunning and colorful Land of the Dead following a mysterious chain of events. Along the way, he meets charming trickster Hector, and together, they set off on an extraordinary journey to unlock the real story behind Miguel\'s family history.</string>
+
+    <string name="trailers_label">Trailers:</string>
+    <string name="reviews_label">Reviews:</string>
 
     <!-- Used by Preferences/Settings -->
     <string name="pref_sort_key" translatable="false">sort</string>
@@ -28,5 +34,13 @@
     <string name="pref_sort_label">Sort Order</string>
     <string name="pref_sort_label_most_popular">Most popular</string>
     <string name="pref_sort_label_top_rated">Highest rated</string>
+
+    <!-- Used by trailers_list_item.xml -->
+    <string name="trailer_1">Trailer 1</string>
+
+    <!-- Used by reviews_list_item.xml -->
+    <string name="written_by_label">Written by </string>
+    <string name="written_by">furious_iz</string>
+    <string name="review">This film has real heart, with great messages about what family can and should do for each other. Great voice acting, great songs without having the burden of exposition via song that you find in the more musical ventures by Disney. I loved that you could see genuine guitar chords being played, so often in live action films the playing of musical instruments, especially guitar are poorly faked. None of that in this animated gem.</string>
 
 </resources>

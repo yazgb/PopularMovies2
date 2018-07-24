@@ -28,7 +28,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="36dp"
             android:paddingEnd="16dp"
+            android:paddingRight="16dp"
             android:paddingStart="0dp"
+            android:paddingLeft="0dp"
             android:textColor="@color/colorWhite"
             android:textSize="32sp"
             app:layout_constraintBottom_toBottomOf="@+id/header_iv"
@@ -49,6 +51,7 @@
             android:background="@drawable/coco"
             android:layout_marginTop="16dp"
             android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
             app:layout_constraintTop_toBottomOf="@+id/header_iv"
             app:layout_constraintLeft_toLeftOf="@+id/header_iv"/>
 
@@ -59,6 +62,7 @@
             tools:text="@string/movie_released_date"
             android:layout_marginTop="32dp"
             android:layout_marginStart="38dp"
+            android:layout_marginLeft="38dp"
             app:layout_constraintTop_toBottomOf="@+id/header_iv"
             app:layout_constraintLeft_toRightOf="@+id/poster_iv"
             android:textSize="24sp"
@@ -79,15 +83,46 @@
             android:id="@+id/synopsis_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
-            android:paddingBottom="16dp"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/poster_iv"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/poster_iv"
             tools:text="@string/movie_synopsis" />
+
+        <View
+            android:id="@+id/view_divider_1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            app:layout_constraintTop_toBottomOf="@id/synopsis_tv"
+            app:layout_constraintLeft_toLeftOf="@id/synopsis_tv"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:background="#dadada" />
+
+        <include
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/trailers_info"
+            layout="@layout/trailers_section"
+            app:layout_constraintLeft_toLeftOf="@id/view_divider_1"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_divider_1"
+            android:layout_marginTop="8dp"/>
+
+        <include
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/reviews_info"
+            layout="@layout/reviews_section"
+            app:layout_constraintLeft_toLeftOf="@id/trailers_info"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trailers_info"
+            android:layout_marginTop="8dp"/>
 
     </android.support.constraint.ConstraintLayout>
 

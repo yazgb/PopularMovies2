@@ -48,8 +48,10 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setUpUI();
+    }
 
-        mRecyclerView.setHasFixedSize(true);
+    protected void setUpUI() {
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mGridLayoutManager = new GridLayoutManager(this, 2);
@@ -58,9 +60,9 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
         }
 
         mRecyclerView.setLayoutManager(mGridLayoutManager);
+        mRecyclerView.setHasFixedSize(true);
 
         mPopularMoviesAdapter = new PopularMoviesAdapter(this);
-
         mRecyclerView.setAdapter(mPopularMoviesAdapter);
 
         LoaderManager.LoaderCallbacks<PopularMovie[]> callback = MainActivity.this;
