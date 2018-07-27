@@ -1,9 +1,12 @@
 package com.android.yaz.popularmovies;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -31,9 +34,12 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements PopularMoviesAdapter.ItemClickListener,
         LoaderManager.LoaderCallbacks<PopularMovie[]>, SharedPreferences.OnSharedPreferenceChangeListener{
 
+    private final static String TAG = MainActivity.class.getSimpleName();
+
     @BindView(R.id.recycler_view_popular_movies) RecyclerView mRecyclerView;
     @BindView(R.id.loading_pb) ProgressBar mLoadingPb;
     @BindView(R.id.error_message_tv) TextView mErrorMessage;
+    @BindView(R.id.no_favorites_message_tv) TextView mNoFavoritesMessage;
 
     private PopularMoviesAdapter mPopularMoviesAdapter;
     private GridLayoutManager mGridLayoutManager;
@@ -43,12 +49,20 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
 
     private static boolean PREFERENCES_HAVE_BEEN_UPDATED = false;
 
+    private MainViewModel mViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setUpUI();
+    }
+
+    protected boolean isSortOrderFavorite() {
+        String preferredSortOrder = MoviesPreferences.getPreferredSortOrder(MainActivity.this);
+        String sortOrderFavorite = getString(R.string.pref_sort_favorites);
+        return preferredSortOrder.equals(sortOrderFavorite);
     }
 
     protected void setUpUI() {
@@ -65,22 +79,47 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
         mPopularMoviesAdapter = new PopularMoviesAdapter(this);
         mRecyclerView.setAdapter(mPopularMoviesAdapter);
 
-        LoaderManager.LoaderCallbacks<PopularMovie[]> callback = MainActivity.this;
-        Bundle bundleForLoader = null;
-
-        getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, bundleForLoader, callback);
+        setupViewModel();
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }
 
+    private void setupViewModel() {
+        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mViewModel.getMovies().observe(this, new Observer<PopularMovie[]>() {
+            @Override
+            public void onChanged(@Nullable PopularMovie[] popularMovies) {
+                if(isSortOrderFavorite()) {
+                    if(popularMovies!=null && popularMovies.length > 0) {
+                        showMoviesDataView();
+                        mPopularMoviesAdapter.setPopularMoviesData(popularMovies);
+                    } else
+                        showNoFavoritesMessage();
+                }
+                else {
+                    getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, null, MainActivity.this);
+                }
+            }
+        });
+    }
+
     private void showMoviesDataView() {
         mErrorMessage.setVisibility(View.INVISIBLE);
+        mNoFavoritesMessage.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     private void showErrorMessage() {
         mRecyclerView.setVisibility(View.INVISIBLE);
+        mNoFavoritesMessage.setVisibility(View.INVISIBLE);
         mErrorMessage.setVisibility(View.VISIBLE);
+    }
+
+    private void showNoFavoritesMessage() {
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mErrorMessage.setVisibility(View.INVISIBLE);
+        mNoFavoritesMessage.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -167,8 +206,11 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
         int id = item.getItemId();
 
         if( id == R.id.action_refresh) {
-            mPopularMoviesAdapter.setPopularMoviesData(null);
-            getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
+            if(!isSortOrderFavorite()) {
+                showMoviesDataView();
+                mPopularMoviesAdapter.setPopularMoviesData(null);
+                getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
+            }
             return true;
         }
 
@@ -191,7 +233,18 @@ public class MainActivity extends AppCompatActivity implements PopularMoviesAdap
         super.onStart();
 
         if(PREFERENCES_HAVE_BEEN_UPDATED) {
-            getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
+            showMoviesDataView();
+            mLoadingPb.setVisibility(View.INVISIBLE);
+            if(!isSortOrderFavorite()) {
+                getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
+            }
+            else {
+                PopularMovie[] movies = mViewModel.getMovies().getValue();
+                if(movies!=null && movies.length > 0) {
+                    mPopularMoviesAdapter.setPopularMoviesData(movies);
+                } else
+                    showNoFavoritesMessage();
+            }
             PREFERENCES_HAVE_BEEN_UPDATED = false;
         }
     }

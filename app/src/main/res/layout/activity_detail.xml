@@ -79,6 +79,15 @@
             android:textSize="16sp"
             android:textColor="@color/colorPrimaryDark"/>
 
+        <include
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/favorite_button"
+            android:layout_marginTop="16dp"
+            app:layout_constraintLeft_toLeftOf="@id/rating_tv"
+            app:layout_constraintTop_toBottomOf="@id/rating_tv" />
+
         <TextView
             android:id="@+id/synopsis_tv"
             android:layout_width="0dp"
@@ -102,7 +111,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
-            android:background="#dadada" />
+            android:background="@color/colorDivider" />
 
         <include
             android:layout_width="0dp"

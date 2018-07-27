@@ -9,15 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.yaz.popularmovies.model.AppExecutors;
+import com.android.yaz.popularmovies.model.MovieDatabase;
 import com.android.yaz.popularmovies.model.MovieReview;
 import com.android.yaz.popularmovies.model.PopularMovie;
 import com.android.yaz.popularmovies.utilities.NetworkUtils;
@@ -47,6 +49,8 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     @BindView(R.id.no_trailers_message_tv) TextView mNoTrailersMessage;
     @BindView(R.id.no_reviews_message_tv) TextView mNoReviewsMessage;
 
+    @BindView(R.id.button_favorite) Button mButton;
+
     private String mMovieId;
     private final static String CLICKED_MOVIE = "clickedMovie";
     private final static int TRAILERS_LOADER_ID = 1;
@@ -58,11 +62,15 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     private LinearLayoutManager mLinearLayoutManagerTrailers;
     private LinearLayoutManager mLinearLayoutManagerReviews;
 
+    private MovieDatabase mDb;
+    private static boolean FAVORITE_MOVIE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
+        mDb = MovieDatabase.getInstance(getApplicationContext());
         setUpMovieDetails();
         setUpTrailersAndReviews();
     }
@@ -82,7 +90,32 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             mMovieSynopsis.append(movie.getSynopsis());
             mMovieRating.append(movie.getUserRating());
             mMovieReleasedDate.append(movie.getReleasedDate());
+
+            setupButton(mMovieId);
         }
+    }
+
+    private void setupButton(final String movieId) {
+        AppExecutors.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                PopularMovie movie = mDb.movieDao().getMovie(movieId);
+                if(movie == null) {
+                    mButton.setText(R.string.button_favorite);
+                    FAVORITE_MOVIE = false;
+                } else {
+                    mButton.setText(R.string.button_unfavorite);
+                    FAVORITE_MOVIE = true;
+                }
+            }
+        });
+
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonClicked();
+            }
+        });
     }
 
     protected void setUpTrailersAndReviews() {
@@ -96,7 +129,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         mReviewsRecyclerView.setLayoutManager(mLinearLayoutManagerReviews);
         mReviewsRecyclerView.setHasFixedSize(true);
 
-        mTrailersAdapter = new TrailersAdapter(this);
+        mTrailersAdapter = new TrailersAdapter(this, this);
         mTrailersRecyclerView.setAdapter(mTrailersAdapter);
 
         mReviewsAdapter = new ReviewsAdapter();
@@ -105,6 +138,39 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         getSupportLoaderManager().initLoader(TRAILERS_LOADER_ID, null, this);
         getSupportLoaderManager().initLoader(REVIEWS_LOADER_ID, null, this);
 
+    }
+
+    public void buttonClicked() {
+        if(FAVORITE_MOVIE)
+            showUnmarkButton();
+        else
+            showMarkAsFavButton();
+    }
+
+    private void showMarkAsFavButton() {
+        Intent intentOrigin = getIntent();
+        final PopularMovie movie = intentOrigin.getParcelableExtra(CLICKED_MOVIE);
+        AppExecutors.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.movieDao().insert(movie);
+                mButton.setText(R.string.button_unfavorite);
+                FAVORITE_MOVIE = true;
+            }
+        });
+    }
+
+    private void showUnmarkButton() {
+        Intent intentOrigin = getIntent();
+        final PopularMovie movie = intentOrigin.getParcelableExtra(CLICKED_MOVIE);
+        AppExecutors.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.movieDao().delete(movie);
+                mButton.setText(R.string.button_favorite);
+                FAVORITE_MOVIE = false;
+            }
+        });
     }
 
     protected void showTrailersDataView() {

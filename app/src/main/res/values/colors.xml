@@ -5,4 +5,6 @@
     <color name="colorAccent">#3d9887</color>
 
     <color name="colorWhite">#fafafa</color>
+    <color name="colorButtonFavorite">#80cbc4</color>
+    <color name="colorDivider">#dadada</color>
 </resources>

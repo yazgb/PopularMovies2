@@ -14,13 +14,15 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     private String[] mTrailersData;
     private final TrailersOnClickListener mDetailsClickListener;
+    private Context context;
 
     public interface TrailersOnClickListener{
         void trailerOnClick(String trailerKey);
     }
 
-    public TrailersAdapter(TrailersOnClickListener onClickListener) {
+    public TrailersAdapter(TrailersOnClickListener onClickListener, Context context) {
         mDetailsClickListener = onClickListener;
+        this.context = context;
     }
 
     public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -52,7 +54,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     @Override
     public void onBindViewHolder(TrailerViewHolder trailerViewHolder, int position) {
-        trailerViewHolder.mTrailerTextView.setText("Trailer " + (position+1));
+        trailerViewHolder.mTrailerTextView.setText(context.getString(R.string.trailer_label) +" " + (position+1));
     }
 
     @Override

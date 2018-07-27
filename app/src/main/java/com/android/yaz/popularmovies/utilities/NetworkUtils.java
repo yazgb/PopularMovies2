@@ -1,7 +1,6 @@
 package com.android.yaz.popularmovies.utilities;
 
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,8 +35,6 @@ public class NetworkUtils {
                 .appendQueryParameter(PARAM_API_KEY, apiKey)
                 .build();
 
-        Log.d(TAG, builtUri.toString());
-
         URL url = null;
 
         try {
@@ -62,8 +59,6 @@ public class NetworkUtils {
                 .appendPath(searchType)
                 .appendQueryParameter(PARAM_API_KEY, apiKey)
                 .build();
-
-        Log.d(TAG, builtUri.toString());
 
         URL url = null;
 

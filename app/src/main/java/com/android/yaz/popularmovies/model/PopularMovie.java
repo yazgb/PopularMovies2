@@ -1,15 +1,27 @@
 package com.android.yaz.popularmovies.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
+@Entity(tableName = "movie")
 public class PopularMovie implements Parcelable {
 
+    @PrimaryKey
+    @NonNull
     private String id;
+    @ColumnInfo(name = "title")
     private String originalTitle;
+    @ColumnInfo(name = "poster")
     private String posterPath;
     private String synopsis;
+    @ColumnInfo(name = "user_rating")
     private String userRating;
+    @ColumnInfo(name = "released_date")
     private String releasedDate;
 
     public PopularMovie(String id, String originalTitle, String posterPath, String synopsis, String userRating, String releasedDate) {
@@ -21,6 +33,7 @@ public class PopularMovie implements Parcelable {
         this.releasedDate = releasedDate;
     }
 
+    @Ignore
     protected PopularMovie(Parcel in) {
         id = in.readString();
         originalTitle = in.readString();
