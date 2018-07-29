@@ -5,10 +5,12 @@ An Android app that allows users to discover the most popular movies playing, hi
 
 ## Note:
 You will need to request an API Key from https://www.themoviedb.org/.
-Once you obtain your key, replace [YOUR_API_KEY_HERE] with your API Key in the NetworkUtils.java file.
+Once you obtain your key, replace THEMOVIEDBAPIKEY with your API Key in the build.gradle file.
 
-	final static String apiKey = "[YOUR_API_KEY_HERE]";
 	
+	buildConfigField("String", "TMDB_API_KEY", THEMOVIEDBAPIKEY)
+	
+
 ## Learning objectives:
 - Network API implementation.
 - Use of Adapters and RecyclerView.
