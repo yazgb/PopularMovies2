@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -101,11 +102,21 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             public void run() {
                 PopularMovie movie = mDb.movieDao().getMovie(movieId);
                 if(movie == null) {
-                    mButton.setText(R.string.button_favorite);
                     FAVORITE_MOVIE = false;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mButton.setText(R.string.button_favorite);
+                        }
+                    });
                 } else {
-                    mButton.setText(R.string.button_unfavorite);
                     FAVORITE_MOVIE = true;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mButton.setText(R.string.button_unfavorite);
+                        }
+                    });
                 }
             }
         });
@@ -154,8 +165,13 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             @Override
             public void run() {
                 mDb.movieDao().insert(movie);
-                mButton.setText(R.string.button_unfavorite);
                 FAVORITE_MOVIE = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mButton.setText(R.string.button_unfavorite);
+                    }
+                });
             }
         });
     }
@@ -167,8 +183,13 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             @Override
             public void run() {
                 mDb.movieDao().delete(movie);
-                mButton.setText(R.string.button_favorite);
                 FAVORITE_MOVIE = false;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mButton.setText(R.string.button_favorite);
+                    }
+                });
             }
         });
     }
