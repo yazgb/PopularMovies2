@@ -87,6 +87,8 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             mMovieTitle.append(movie.getOriginalTitle());
             Picasso.with(this)
                     .load(movie.getPosterPath())
+                    .placeholder(R.drawable.poster_placeholder)
+                    .error(R.drawable.poster_placeholder_error)
                     .into(mMoviePoster);
             mMovieSynopsis.append(movie.getSynopsis());
             mMovieRating.append(movie.getUserRating());

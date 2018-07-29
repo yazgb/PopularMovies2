@@ -61,6 +61,8 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
 
         Picasso.with(moviesAdapterViewHolder.itemView.getContext())
                 .load(posterUrl)
+                .placeholder(R.drawable.poster_placeholder)
+                .error(R.drawable.poster_placeholder_error)
                 .into(moviesAdapterViewHolder.mImageView);
     }
 
