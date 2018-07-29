@@ -56,6 +56,9 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     private final static String CLICKED_MOVIE = "clickedMovie";
     private final static int TRAILERS_LOADER_ID = 1;
     private final static int REVIEWS_LOADER_ID = 2;
+    private final static String YOUTUBE = "vnd.youtube:";
+    private final static String SEARCH_VIDEOS = "videos";
+    private final static String SEARCH_REVIEWS = "reviews";
 
     private TrailersAdapter mTrailersAdapter;
     private ReviewsAdapter mReviewsAdapter;
@@ -239,7 +242,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     @Override
     public void trailerOnClick(String trailerKey) {
 
-        Intent intentYoutubeApp = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailerKey));
+        Intent intentYoutubeApp = new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE + trailerKey));
         if(intentYoutubeApp.resolveActivity(getPackageManager()) != null)
             startActivity(intentYoutubeApp);
     }
@@ -270,7 +273,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             @Override
             public String[] loadInBackground() {
 
-                URL url = NetworkUtils.buildUrlWithMovieId(mMovieId,"videos");
+                URL url = NetworkUtils.buildUrlWithMovieId(mMovieId,SEARCH_VIDEOS);
 
                 try {
                     String jsonTrailersResponse = NetworkUtils.getResponseFromHttpUrl(url);
@@ -309,7 +312,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 
             @Override
             public MovieReview[] loadInBackground() {
-                URL url = NetworkUtils.buildUrlWithMovieId(mMovieId, "reviews");
+                URL url = NetworkUtils.buildUrlWithMovieId(mMovieId, SEARCH_REVIEWS);
 
                 try {
                     String jsonReviewsResponse = NetworkUtils.getResponseFromHttpUrl(url);
