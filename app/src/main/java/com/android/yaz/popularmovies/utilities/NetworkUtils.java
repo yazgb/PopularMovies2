@@ -1,6 +1,9 @@
 package com.android.yaz.popularmovies.utilities;
 
 import android.net.Uri;
+import android.util.Log;
+
+import com.android.yaz.popularmovies.BuildConfig;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +23,7 @@ public class NetworkUtils {
 
     /* The API Key field */
     private final static String PARAM_API_KEY = "api_key";
-    private final static String apiKey = "[YOUR_API_KEY_HERE]";
+    private final static String apiKey = BuildConfig.TMDB_API_KEY;
 
     /**
      * Builds the URL used to query TheMovieDB.
