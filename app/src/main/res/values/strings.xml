@@ -45,7 +45,7 @@
     <string name="trailer_1">Trailer 1</string>
 
     <!-- Used by TrailersAdapter.java -->
-    <string name="trailer_label">Trailer</string>
+    <string name="trailer_message">Trailer %1$d</string>
 
     <!-- Used by reviews_list_item.xml -->
     <string name="written_by_label">Written by </string>

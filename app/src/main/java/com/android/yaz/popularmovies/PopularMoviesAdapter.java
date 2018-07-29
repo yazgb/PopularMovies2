@@ -56,7 +56,7 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
     @Override
     public void onBindViewHolder(MoviesAdapterViewHolder moviesAdapterViewHolder, int position) {
 
-        PopularMovie movie = mMoviesData[position];
+        PopularMovie movie = mMoviesData[moviesAdapterViewHolder.getAdapterPosition()];
         String posterUrl = movie.getPosterPath();
 
         Picasso.with(moviesAdapterViewHolder.itemView.getContext())
